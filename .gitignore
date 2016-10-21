@@ -37,3 +37,6 @@ env/
 
 #App keys
 secret.sh
+
+#File for adding here document git commit messages
+message.txt
