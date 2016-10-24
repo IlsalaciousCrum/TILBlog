@@ -25,6 +25,12 @@ app.jinja_env.undefined = StrictUndefined
 
 #  ---------------------------
 
+@app.route('/login', methods=['GET'])
+def show_login_form():
+    """Show login form."""
+
+    return render_template("login_form.html")
+
 
 
 #  ----------
