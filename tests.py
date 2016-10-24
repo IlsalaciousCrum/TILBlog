@@ -44,7 +44,7 @@ class TILTestsDatabase(unittest.TestCase):
         """Stuff to do before every database test."""
 
         # Connect to test database
-        connect_to_db(app, "postgresql:///testdb")
+        connect_to_db(app, "postgresql:///blogtestdb")
 
         # Create tables and add sample data
         db.create_all()
