@@ -3,12 +3,25 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import pytz
+from helper_functions import encrypt, random_string
 
 db = SQLAlchemy()
 
 ##############################################################################
 # Model definitions
 
+
+class User(db.Model):
+    """An admin user of the blog"""
+
+    __tablename__ = "users"
+
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    username = db.Column(db.String(128), nullable=False, unique=True)
+    password = db.Column(db.String(200), nullable=False)
+    session_code = db.Column(db.String(25), nullable=False, unique=False)
+    email = db.Column(db.String(200), nullable=False)
+    phone_number = password = db.Column(db.String(200), nullable=False)
 
 
 class Post(db.Model):
@@ -17,6 +30,7 @@ class Post(db.Model):
     __tablename__ = "posts"
 
     post_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     timestamp = db.Column(db.DateTime)
     title = db.Column(db.String(128), nullable=False, unique=True)
     subject = db.Column(db.String(128), nullable=False, unique=False)
@@ -49,6 +63,16 @@ class Category(db.Model):
 def example_data():
     """Create some sample data."""
 
+    username = encrypt('George')
+    password = encrypt('fXgbAk/3pKZmPHMGgN*kd8v{7Hy')
+    session_code = random_string()
+    hashed_session_code = encrypt(session_code)
+    email = encrypt('loislane@gmail.com')
+    phone_number = encrypt('555-122-1212')
+
+    fake_user = User(username=username, password=password,
+                     session_code=hashed_session_code, email=email, phone_number=phone_number)
+
     a1 = "21-Oct-2016 14:25:01.426226"
     a2 = "08-Oct-1976 07:25:01.426226"
     a3 = "23-Apr-2015 20:25:01.426226"
@@ -77,7 +101,7 @@ def example_data():
     J = PostCategories(post_id=2, cat_id=2)
     K = PostCategories(post_id=2, cat_id=3)
 
-    db.session.add_all([A, B, C, D, E, F, G, H, I, J, K])
+    db.session.add_all([A, B, C, D, E, F, G, H, I, J, K, fake_user])
     db.session.commit()
 
 ##############################################################################
