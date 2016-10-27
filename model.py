@@ -5,6 +5,7 @@ from datetime import datetime
 import pytz
 from helper_functions import encrypt, random_string
 
+
 db = SQLAlchemy()
 
 ##############################################################################
@@ -21,7 +22,7 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable=False)
     session_code = db.Column(db.String(25), nullable=False, unique=False)
     email = db.Column(db.String(200), nullable=False)
-    phone_number = password = db.Column(db.String(200), nullable=False)
+    phone_number = db.Column(db.String(200), nullable=False)
 
 
 class Post(db.Model):
@@ -105,6 +106,7 @@ def example_data():
     db.session.commit()
 
 ##############################################################################
+
 # Database Helper functions
 
 
@@ -119,6 +121,7 @@ def connect_to_db(app, db_uri=None):
         db.create_all()
     return app
 
+##############################################################################
 
 if __name__ == '__main__':
 
